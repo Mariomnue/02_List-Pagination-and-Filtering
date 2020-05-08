@@ -11,9 +11,10 @@ const number_of_items = 10;
 
 //console.log("student_list length: " +student_list.length);
 
-function showPage(list, page){
-let startIndex = (page * number_of_items) - number_of_items;
-let endIndex = page * number_of_items;
+const showPage = (list, page) => {
+list = student_list;//remove me later
+  let startIndex = (page * number_of_items) - number_of_items;
+  let endIndex = page * number_of_items;
 //console.log(startIndex+ "    " +endIndex);
   for(var i=0; i<student_list.length; i++){
     student_list[i].style.display = "none"
@@ -21,43 +22,74 @@ let endIndex = page * number_of_items;
       student_list[i].style.display = "block"
     }
   }
+  appendPageLinks(list, 1);
 }
 
 showPage(1, 1);///never send a 0;
-pagination(1);
-function pagination(list){
-  let parent = document.querySelector('.page')
-  let div = document.createElement('div')
-  div.className = "pagination"
-  parent.appendChild(div);
+//pagination(1);
+function appendPageLinks(list, page){
+//look for the list below before you recreate it!
+// if(div !== true){
+//   console.log("true")
+// }
+// let startIndex = (page * number_of_items) - number_of_items;
+// let endIndex = page * number_of_items;
+// let newList;
+// //console.log(newList.NodeType);
+// for(var i=startIndex; i<10; i++){
+// console.log(list)
+//   newList.push(list[i]);
+// }
 
-  let numPages = Math.ceil(student_list.length / number_of_items)
-for(let i=1; i<= numPages; i++){
-  let li = document.createElement('li');
-  let span = document.createElement('span');
-//  span.innerHTML = '<a class="active" href="http:www.google.com">'+i+'</a>';//they work
-  span.innerHTML = '<a class="active" href="#">'+i+'</a>';
-  li.appendChild(span);
-  div.appendChild(li);
-}
+let page_list = student_list;///student_list will be subst with jsut: list
+    const div = document.createElement('div')
+    div.className = "pagination"
+    list = document.querySelector('.page')
+    list.appendChild(div)
+    const ul = document.createElement('ul');
+    div.appendChild(ul);
+//console.log(div.parentNode);
 
-////   START HERE //////   THE ABOVE APPEARS TO BE WORKING UNSURE OF THE LINKS
+    let numPages = Math.ceil(page_list.length / number_of_items)
 
 
-        // let li = document.createElement('li');
-        // let span = document.createElement('span');
-        // span.innerHTML = '<a class="active" href="#">1</a>';
-        // li.appendChild(span);
-        // div.appendChild(li);
-  //Str +='li';
-   //li.appendChild('<a class="active" href="#">1</a>');//add the href
-  // li.appendChild('<a class="active" href="#">2</a>');//add the href
-  // li.appendChild('<a class="active" href="#">3</a>');//add the href
-  // li.appendChild('<a class="active" href="#">4</a>');//add the href
-  // li.appendChild('<a class="active" href="#">5</a>');//add the href
-  // li.appendChild('<a class="active" href="#">6</a>');//add the href
+    for(let i=1; i<=numPages; i++){
+      let li = document.createElement('li');
+      let span = document.createElement('span');////remove
+//console.log(li.parentNode)//there is no parent at this point.
+
+      if(list === i){
+        span.innerHTML = '<a class="active" href="#">'+i+'</a>';
+        li.addEventListener('click', (e) =>{
+            //showPage(1, 2);
+
+        })
+      }
+      else{
+        span.innerHTML = '<a href="#">'+i+'</a>';//appendPageLinks
+        //let textStuff = '<a href="#">'+i+'</a>';
+//console.log(li.NodeType)
+        //li.appendPageLinks('<a href="#">'+i+'</a>')
+        ul.appendChild(li);
+        li.appendChild(span);
+        ul.appendChild(li);
+      //ul.appendChild(li);
+      }
+      //span.innerHTML = '<a class="active" href="#">'+i+'</a>';
+
+      ul.addEventListener('click', (e) =>{
+console.log(e+ ' do something ' +e);
+        //showPage(1, 2);
+///          alert(e+ '  ' +e);
+      })
+    }
+
+
 console.log(student_list.length+ " " +numPages)
 }
+//removeElement(elementID)
+////   START HERE //////   THE ABOVE APPEARS TO BE WORKING Links work!
+//only the active href should have the "active" class applied
 
 
 
@@ -72,3 +104,33 @@ console.log(student_list.length+ " " +numPages)
 
 
 // Remember to delete the comments that came with this file, and replace them with your own code comments.
+// function appendPageLinks(page){
+//   let parent = document.querySelector('.page')
+//   let div = document.createElement('div')
+//   div.className = "pagination"
+//   parent.appendChild(div);
+//   div.appendChild();
+//   let numPages = Math.ceil(student_list.length / number_of_items)
+// //alert(numPages)
+//     for(let i=1; i<=numPages; i++){
+//       let li = document.createElement('li');
+//       let span = document.createElement('span');
+//     //  span.innerHTML = '<a class="active" href="http:www.google.com">'+i+'</a>';//they work
+// //alert(numPages+ "   " + page)
+//       if(page === i){
+//         span.innerHTML = '<a class="active" href="#">'+i+'</a>';
+//         //span.addEventListener('click'){
+//           alert(li.a);
+//       //  }
+//       }
+//       else{
+//         span.innerHTML = '<a href="#">'+i+'</a>';
+//       }
+//       //span.innerHTML = '<a class="active" href="#">'+i+'</a>';
+//       li.appendChild(span);
+//       div.appendChild(li);
+//     }
+//
+//
+// console.log(student_list.length+ " " +numPages)
+// }
