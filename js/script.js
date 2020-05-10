@@ -68,12 +68,10 @@ FSJS project 2 - List Filter and Pagination
 
 
 //  function searchForStudent(){
-
-// const form = document.createElement('form');
-// const searchField = document.createElement('input');
-// const searchButton = document.createElement('button');
+//starts with building the search element and event
     const form = document.createElement('form');
     const input = document.createElement('input');
+    input.placeholder = "Search for students...";
     const searchButton = document.createElement('button');
     form.appendChild(input);
     form.appendChild(searchButton);
@@ -83,30 +81,36 @@ FSJS project 2 - List Filter and Pagination
     searchButton.className = "student-search";
     searchDiv.className = "student-search";
     parentDiv.appendChild(searchDiv);
-
     searchDiv.appendChild(form);
 
-    form.addEventListener('submit', (e) =>{
-      e.preventDefault();
-      const text = input.value;
-      input.value = '';
-      alert(text)
-    })
+    form.addEventListener('submit', (e) => {
+			e.preventDefault();
+			const text = input.value;
+      searchForStudent(text);
+//console.log(input.value);
+      input.value = '';//clear it out after its been used.
+		});
 
+    function searchForStudent(text){
+      list = document.querySelectorAll('h3');
+      const searchString = text;//input from user
+      for (var k=0; k<searchString.length; k++){//start with searching the input string one char at a time.
+        for(var i=0; i<list.length; i++){//for(student in list);search each student in list
+          let item = list[i].textContent;
+          for(var j=0; j<item.length; j++){//for char in student
+            if(searchString[k] === item[j]){
+console.log(searchString);
+            }
+          }
+        }
+      }
+//need to loop through each element in the list;
+  //then loop through each elements content
+  //and compare it to the search field
 
+//m = 19
+//ma = 83
+//mar = 150
+//mary = 158
 
-
-
-console.log(parentDiv);
-
-// const editButton = document.createElement('button');
-// editButton.textContent = "Edit";
-// li.appendChild(editButton);
-
-// form.addEventListener('submit', (e) => {
-//   e.preventDefault();
-//   const text = input.value;
-//   input.value = '';
-//   const li = createLI(text);
-//   ul.appendChild(li);
-// });
+    }
