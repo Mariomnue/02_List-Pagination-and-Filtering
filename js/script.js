@@ -91,19 +91,48 @@ FSJS project 2 - List Filter and Pagination
       input.value = '';//clear it out after its been used.
 		});
 
+let newList = [];
     function searchForStudent(text){
       list = document.querySelectorAll('h3');
       const searchString = text;//input from user
       for (var k=0; k<searchString.length; k++){//start with searching the input string one char at a time.
         for(var i=0; i<list.length; i++){//for(student in list);search each student in list
           let item = list[i].textContent;
-          for(var j=0; j<item.length; j++){//for char in student
-            if(searchString[k] === item[j]){
-console.log(searchString);
-            }
-          }
+            setSubset(item);//call the subset maker and return out if it matches
         }
+console.log(newList[k].innerHTML+ " Now we have to do something with the new list! like send it to 'showPage(1, 1);'");
       }
+
+function setSubset(item){
+  for(var j=0; j<item.length; j++){//for char in student
+    if(searchString[k] === item[j]){
+      newList.push(list[i])
+      return;//job done return to caller
+    }
+  }
+}
+
+
+///////////  DON'T BREAK ME!
+//     function searchForStudent(text){
+//       list = document.querySelectorAll('h3');
+//       let newList = [];
+//       const searchString = text;//input from user
+//       for (var k=0; k<searchString.length; k++){//start with searching the input string one char at a time.
+//         for(var i=0; i<list.length; i++){//for(student in list);search each student in list
+//           let item = list[i].textContent;
+//           for(var j=0; j<item.length; j++){//for char in student
+//             if(searchString[k] === item[j]){
+// console.log(searchString);
+//               newList.push(list[i])
+// console.log(newList[0].innerHTML+ "  " +newList.length);
+//             }
+//           }
+//         }
+// console.log(newList[1].innerHTML);
+//       }
+///////////  end DON'T BREAK ME!
+
 //need to loop through each element in the list;
   //then loop through each elements content
   //and compare it to the search field
