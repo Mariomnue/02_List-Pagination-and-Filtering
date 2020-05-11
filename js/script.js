@@ -3,21 +3,37 @@ Treehouse Techdegree:
 FSJS project 2 - List Filter and Pagination
 ******************************************/
 // Study guide for this project - https://drive.google.com/file/d/1OD1diUsTMdpfMDv677TfL1xO2CEkykSz/view?usp=sharing
-//showPage displays the truncated list based on the page number sent to it.
-//it uses the list argument to generate the list of students to display.
+
 //document.addEventListener('DOMContentLoaded', () => {//
+////REMB every list is a subset of this master list.
+////if the list ever comes from outside the html this will need to change
   const student_list = document.getElementsByClassName("student-item cf");
   const number_of_items = 10;
+  //global variable that is necessary for the setSubset access.
+  let newList = [];//find a way to put this inside the function
+  //newList is used by function listMaker to build the pagination list;
+//  const list = student_list;//remove me later
   const showPage = (list, page) => {
   list = student_list;//remove me later
-    let startIndex = (page * number_of_items) - number_of_items;
-    let endIndex = page * number_of_items;
+  let startIndex = (page * number_of_items) - number_of_items;
+  let endIndex = page * number_of_items;
+    function listMaker(){
+      for(var i=0; i<10; i++){
+        newList.push[i]
+      }
+    }
+    listMaker();
+//console.log("old: " +list.length+ "new: " +newList.length);
     for(var i=0; i<list.length; i++){
       list[i].style.display = "none"
       if(i >= startIndex && i < endIndex){
         list[i].style.display = "block"
       }
     }
+    if(!page){
+      let page = 1;
+    }
+    //appendPageLinks(list, page)
   }
 
   showPage(1, 1);///never send a 0;
@@ -28,7 +44,7 @@ FSJS project 2 - List Filter and Pagination
       let page_list = student_list;///student_list will be subst with jsut: list
       const div = document.createElement('div')
       div.className = "pagination"
-      list = document.querySelector('.page')//isn't this the same as student_list ?
+      list = document.querySelector('.page')//isn't this the same as student_list it's an HTML Collection
       list.appendChild(div)
       const ul = document.createElement('ul');
       div.appendChild(ul);
@@ -49,26 +65,13 @@ FSJS project 2 - List Filter and Pagination
       showPage(list, e.target.textContent)
       div.parentNode.removeChild(div)
       appendPageLinks(1, parseInt(e.target.textContent, 10));
-  //excellent, links work! page reloads with proper content.
      })
-  //console.log(student_list.length+ " <-num students,  num pages-> " +numPages)
   }
-
-//Dynamically create and append a search bar.
-// Avoid making any changes in the index.html file.
-// You can reference the examples/example-exceeds.html file, lines 16-19,
-//  to see an example of the markup you'll create.
-
-// <!-- student search HTML to add dynamically -->
-// // <div class="student-search">
-// //   <input placeholder="Search for students...">
-// //   <button>Search</button>
-// // </div>
-// <!-- end search -->
 
 
 //  function searchForStudent(){
 //starts with building the search element and event
+//below are document elements not in a function.
     const form = document.createElement('form');
     const input = document.createElement('input');
     input.placeholder = "Search for students...";
@@ -76,43 +79,75 @@ FSJS project 2 - List Filter and Pagination
     form.appendChild(input);
     form.appendChild(searchButton);
     searchButton.textContent = "Search";
+
     const parentDiv = document.querySelector('.page-header');
     const searchDiv = document.createElement('div')
     searchButton.className = "student-search";
     searchDiv.className = "student-search";
     parentDiv.appendChild(searchDiv);
     searchDiv.appendChild(form);
-
+//append the addEventListener
     form.addEventListener('submit', (e) => {
 			e.preventDefault();
 			const text = input.value;
       searchForStudent(text);
-//console.log(input.value);
       input.value = '';//clear it out after its been used.
 		});
 
-let newList = [];
+//global variable that is necessary for the setSubset access.
     function searchForStudent(text){
-      list = document.querySelectorAll('h3');
+      const nDiv = document.querySelector('.page');
+      //let nlist = document.querySelectorAll('h3');//student_list{ul}.student-item cf{li}.student-details{div};//do not mess with this
+      const ul = document.createElement('ul');
+      ul.className = 'student-list'
+
+
+
+moveUl = parentDiv.parentNode.firstElementChild.nextSibling;
+console.log(moveUl);
+nDiv.insertBefore(ul, moveUl)
+
+
+
+      nDiv.appendChild(ul);
+
       const searchString = text;//input from user
       for (var k=0; k<searchString.length; k++){//start with searching the input string one char at a time.
-        for(var i=0; i<list.length; i++){//for(student in list);search each student in list
-          let item = list[i].textContent;
+        for(var i=0; i<student_list.length; i++){//for(student in list);search each student in list
+          //let item = student_list[i];//set item to the content of
+          let item = student_list[i].textContent;
             setSubset(item);//call the subset maker and return out if it matches
+            //nlist.appendChild(span);
         }
-console.log(newList[k].innerHTML+ " Now we have to do something with the new list! like send it to 'showPage(1, 1);'");
-      }
 
-function setSubset(item){
-  for(var j=0; j<item.length; j++){//for char in student
-    if(searchString[k] === item[j]){
-      newList.push(list[i])
-      return;//job done return to caller
+      }
+//setSubset function is used to escape the nested for-loop in the searchForStudent function
+//Leave this function alone. it fetches a matching student data and returns it.
+  function setSubset(item){
+    for(var j=0; j<item.length; j++){//for char in student
+      if(searchString[k] === item[j]){
+      let li = document.createElement('li');
+      li.innerHTML = student_list[i].innerHTML;
+      li.className = 'student-details';
+      ul.appendChild(li);//append to ul the new student-details in li
+//console.log(student_list+ ' newList: ' +newList);
+      return ul;//job done return to caller
+      }
     }
   }
+//we are still in the searchForStudent function;
+//console.log(nDiv);
+ let oldUl = nDiv.getElementsByClassName('student-list');//this gives two uls i'm looking for.
+ let mNew = oldUl[0]//this is the new list in html innerHTML format;
+//mNew.parentNode;
+//need to swap out the oldUl[0] with new new oldUl[1]
+//let path = mNew.parentNode.firstElementChild.nextSibling;
+
+//path.insertBefore(oldUl, mNew.parent.firstElementChild.nextSibling)
+
+//console.log(mNew.parentNode.firstElementChild.nextSibling);
+  showPage(mNew)//out with the old, in with the new;
 }
-
-
 ///////////  DON'T BREAK ME!
 //     function searchForStudent(text){
 //       list = document.querySelectorAll('h3');
@@ -142,4 +177,16 @@ function setSubset(item){
 //mar = 150
 //mary = 158
 
-    }
+    // }
+    //
+    // const showPage = (list, page) => {
+    // list = student_list;//remove me later
+    // let startIndex = (page * number_of_items) - number_of_items;
+    // let endIndex = page * number_of_items;
+    //   for(var i=0; i<list.length; i++){
+    //     list[i].style.display = "none"
+    //     if(i >= startIndex && i < endIndex){
+    //       list[i].style.display = "block"
+    //     }
+    //   }
+     //}
