@@ -12,68 +12,55 @@ FSJS project 2 - List Filter and Pagination
   const divPagination = document.createElement('div')
   divPagination.className = "pagination"
   //global variable that is necessary for the setSubset access.
-  let newList = [];//find a way to put this inside the function
-  //newList is used by function listMaker to build the pagination list;
+//  let newList = [];//find a way to put this inside the function
+  //newList is used by function listMaker to build the pagination list; no longer true;
 //  const list = student_list;//remove me later
   const showPage = (list, page) => {
     list = student_list;//remove me later
+    console.log(page);
     let startIndex = (page * number_of_items) - number_of_items;
     let endIndex = page * number_of_items;
-      function listMaker(){
-        for(var i=0; i<10; i++){
-          newList.push[i]
-        }
-      }
-      listMaker();
-  //console.log("old: " +list.length+ "new: " +newList.length);
-      for(var i=0; i<list.length; i++){
-        list[i].style.display = "none"
+      for(var i=0; i<student_list.length; i++){
         if(i >= startIndex && i < endIndex){
-          list[i].style.display = "block"
+          student_list[i].style.display = '';
+        }else{
+          student_list[i].style.display = "none"
         }
       }
-      if(!page){
-        let page = 1;
-      }
-      //appendPageLinks(list, page)
   }
 
   showPage(1, 1);///never send a 0;
-  appendPageLinks(1, 1);
+  appendPageLinks(1);
 
-//borrowed from brunomarchir/list-pagination-and-filtering// thanks brunomarchir.
+//below borrowed from brunomarchir/list-pagination-and-filtering// thanks brunomarchir.
   const reset= () => {
     divPagination.innerHTML = "";
   }//borrowed from brunomarchir/list-pagination-and-filtering// thanks brunomarchir.
 
-  //the appendPageLinks function builds the navigation buttons at the bottom.
-  function appendPageLinks(list, page){
-      let page_list = student_list;///student_list will be subst with jsut: list
-      // const div = document.createElement('div')
-      // div.className = "pagination"
-      list = document.querySelector('.page')//isn't this the same as student_list it's an HTML Collection
-      list.appendChild(divPagination)
+  //the appendPageLinks function builds the navigation buttons at the bottom of the stage.
+  function appendPageLinks(page){
+      const newlist = document.querySelector('.page')//isn't this the same as student_list it's an HTML Collection
+      newlist.appendChild(divPagination)
       const ul = document.createElement('ul');
       divPagination.appendChild(ul);
-      let numPages = Math.ceil(page_list.length / number_of_items)
+      let numPages = Math.ceil(student_list.length / number_of_items)
       for(let i=1; i<=numPages; i++){
         let li = document.createElement('li');
         let span = document.createElement('span');////remove
-          if(i === page){
+          if(i == page){//two == not three ===?
             span.innerHTML = '<a class="active" href="#">'+i+'</a>';
           }
           else{
-            span.innerHTML = '<a href="#">'+i+'</a>';//appendPageLinks
+            span.innerHTML = '<a href="#">'+i+'</a>';
           }
         li.appendChild(span);
         ul.appendChild(li);
       }
 
       ul.addEventListener('click', (e) =>{
-      showPage(list, e.target.textContent)
-reset();
-      //divPagination.parentNode.removeChild(divPagination)
-      appendPageLinks(1, parseInt(e.target.textContent, 10));
+      showPage(newlist, e.target.textContent)
+      reset();
+      appendPageLinks(e.target.textContent);
      })
 
 
@@ -83,25 +70,24 @@ reset();
 //  function searchForStudent(){
 //starts with building the search element and event
 //below are document elements not in a function.
+//Create the form, input field, and buttons
+//append everything together.
     const form = document.createElement('form');
     const input = document.createElement('input');
     input.placeholder = "Search for students...";
     const searchButton = document.createElement('button');
-
     form.appendChild(input);
     form.appendChild(searchButton);
     searchButton.textContent = "Search";
-
     const parentDiv = document.querySelector('.page-header');
     const searchDiv = document.createElement('div')
-
-
     searchButton.className = "student-search";
     searchDiv.className = "student-search";
     parentDiv.appendChild(searchDiv);
     searchDiv.appendChild(form);
 
-//borrowed from brunomarchir/list-pagination-and-filtering// thanks brunomarchir.
+//Display no Results when needed.
+//below borrowed from brunomarchir/list-pagination-and-filtering// thanks brunomarchir.
     //create 'no results' message
     noResults = document.createElement('h2');
     noResults.textContent = "Sorry, no results have been found.";
@@ -109,37 +95,31 @@ reset();
     noResults.style.display = 'none';
 //borrowed from brunomarchir/list-pagination-and-filtering// thanks brunomarchir.
 
-
     function searchForStudent(text){
 
-      const nDiv = document.querySelector('.page');
-      //let nlist = document.querySelectorAll('h3');//student_list{ul}.student-item cf{li}.student-details{div};//do not mess with this
-      const ul = document.createElement('ul');
-      ul.className = 'student-list'
+      // const nDiv = document.querySelector('.page');
+      // const ul = document.createElement('ul');
+      // ul.className = 'filtered_student-list'
+      // nDiv.appendChild(ul);
 
-// moveUl = parentDiv.parentNode.firstElementChild.nextSibling;
-// console.log(moveUl);
-// nDiv.insertBefore(ul, moveUl)
-
-      nDiv.appendChild(ul);
-
-//borrowed from brunomarchir/list-pagination-and-filtering// thanks brunomarchir.
+//below borrowed from brunomarchir/list-pagination-and-filtering// thanks brunomarchir.
       noResults.style.display = ('none');
       const filteredList = [];
-
       const searchString = text;//input from user
       for(var k=0; k<student_list.length; k++){
-        if(student_list[k].innerHTML.includes(input.value.toLowerCase())){
-          student_list[k].style.display = ('');
-          filteredList.push(student_list[k]);
-        }else{
-          student_list[k].style.display = ('none');
-        }
-      }
+        if(student_list[k].innerHTML.includes(input.value.toLowerCase())){//if any part of student contains the input value
+          student_list[k].style.display = ('');//show student;
+          filteredList.push(student_list[k]);// push student to filtered list
 
+        }else{
+          student_list[k].style.display = ('none');//else hide student;
+        }
+
+      }
       if (filteredList.length == 0){
         noResults.style.display = ('');
       }
+console.log(filteredList.length);
 
 reset();
 showPage(filteredList, 1);
