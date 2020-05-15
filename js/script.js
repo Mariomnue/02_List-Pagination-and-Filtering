@@ -7,7 +7,7 @@ FSJS project 2 - List Filter and Pagination
 //document.addEventListener('DOMContentLoaded', () => {//
 ////REMB every list is a subset of this master list.
   const student_list = document.getElementsByClassName("student-item cf");
-  const filteredList = student_list[0];//document.getElementsByClassName("student-item cf");//move to the top with description
+  let filteredList = student_list[0];//document.getElementsByClassName("student-item cf");
 
   const number_of_items = 10;
   const divPagination = document.createElement('div')
@@ -15,8 +15,8 @@ FSJS project 2 - List Filter and Pagination
   let target = "";
   let startIndex = 0;
   let endIndex = 0;
-//list is one of two things; student_list or filteredList.
-//page is the page number that was clicked. if from search then its set to 1.
+//listIn is one of two things; student_list or filteredList.
+//pageIn is the page number that was clicked. if from search then its set to 1.
   const showPage = (listIn, pageIn) => {//start of showPage function
     const list = listIn;
     const page = pageIn
@@ -24,7 +24,7 @@ FSJS project 2 - List Filter and Pagination
     let endIndex = page * number_of_items;
     if(cnt > 10){
       reset();
-      list.length = cnt;
+      list.length = cnt;//cnt is the number of filteredList items from the search.
     }
     for(var i=0; i<list.length; i++){
         if(i >= startIndex && i < endIndex){
@@ -49,10 +49,8 @@ FSJS project 2 - List Filter and Pagination
 //the appendPageLinks function builds the navigation buttons at the bottom of the stage.
 //This function is called from showPage function only.
   function appendPageLinks(listIn){////This should be a list not a page number
-let list = listIn;
-//console.log('appendPageLinks List.length: '+list.length);
-//divParent isn't the same as student_list it's an HTML Collection
-//it is used to place the paginatioin links at the bottom.
+      let list = listIn;
+//divParent is used to place the paginatioin links at the bottom.
       const divParent = document.querySelector('.page')
       divParent.appendChild(divPagination)
       const ul = document.createElement('ul');
@@ -74,7 +72,6 @@ let list = listIn;
         li.appendChild(span);
         ul.appendChild(li);
       }
-//######## DON'T TOUCH THIS
 //########  append the clickies to the pagination buttons
       ul.addEventListener('click', (e) =>{//This is appending the links
         reset();
@@ -112,10 +109,18 @@ let list = listIn;
     noResults.style.display = ('none');
 //end borrowed from brunomarchir/list-pagination-and-filtering// thanks brunomarchir.
 
+function clearSearch(){
+  for(i=0; i<cnt; i++){
+    filteredList = [];
+  }
+    cnt = 0;
+    reset();
+}
+
 let cnt = 0;//cnt is used to build the filtered list.
     function searchForStudent(text){
+      clearSearch();
       let inputVal = text;
-      cnt = 0;
       noResults.style.display = ('none');
       const searchString = text;//input from user
 
