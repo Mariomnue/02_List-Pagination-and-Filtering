@@ -37,9 +37,6 @@ FSJS project 2 - List Filter and Pagination
     appendPageLinks(list);
   }
 
-
-
-
 //below borrowed from brunomarchir/list-pagination-and-filtering// thanks brunomarchir.  This has undergone change from brunomarchir original
     const reset= () => {
       divPagination.innerHTML = "";
@@ -150,5 +147,11 @@ form.addEventListener('submit', (e) => {
   input.value = '';//clear it out after its been used.
   searchForStudent(text);
 });
+form.addEventListener('keyup', (e) =>{
+  e.preventDefault();
+  const text = input.value;
+  searchForStudent(text);
+});
 
 showPage(student_list, 1);///never send a 0;
+//}
