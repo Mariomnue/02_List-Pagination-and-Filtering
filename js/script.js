@@ -16,15 +16,17 @@ FSJS project 2 - List Filter and Pagination
   let startIndex = 0;
   let endIndex = 0;
 //list is one of two things; student_list or filteredList.
-//page comes from the pagination links or is set to -2 if its a search.
+//page is the page number that was clicked. if from search then its set to 1.
   const showPage = (listIn, pageIn) => {//start of showPage function
     const list = listIn;
     const page = pageIn
-console.log("list:  "+list+ " page: " + page);
     let startIndex = (page * number_of_items) - number_of_items;
     let endIndex = page * number_of_items;
+    if(cnt > 10){
+      reset();
+      list.length = cnt;
+    }
     for(var i=0; i<list.length; i++){
-
         if(i >= startIndex && i < endIndex){
           list[i].style.display = ('block');//if student is on this list then show them
         }else{
@@ -42,6 +44,7 @@ console.log("list:  "+list+ " page: " + page);
     const reset= () => {
       divPagination.innerHTML = "";
     }
+//end borrowed from brunomarchir/list-pagination-and-filtering// thanks brunomarchir.
 
 //the appendPageLinks function builds the navigation buttons at the bottom of the stage.
 //This function is called from showPage function only.
@@ -101,18 +104,16 @@ let list = listIn;
     searchDiv.appendChild(form);
 
 //Display no Results when needed.
+//create 'no results' message
 //below borrowed from brunomarchir/list-pagination-and-filtering// thanks brunomarchir.  This has undergone change from brunomarchir original
-    //create 'no results' message
     noResults = document.createElement('h2');
     noResults.textContent = "Sorry, no results have been found.";
     searchDiv.appendChild(noResults);
     noResults.style.display = ('none');
-//borrowed from brunomarchir/list-pagination-and-filtering// thanks brunomarchir.
+//end borrowed from brunomarchir/list-pagination-and-filtering// thanks brunomarchir.
 
-
-let cnt = 0;
+let cnt = 0;//cnt is used to build the filtered list.
     function searchForStudent(text){
-//below borrowed from brunomarchir/list-pagination-and-filtering// thanks brunomarchir.  This has undergone change from brunomarchir original
       let inputVal = text;
       cnt = 0;
       noResults.style.display = ('none');
@@ -120,25 +121,21 @@ let cnt = 0;
 
       for(var k=0; k<student_list.length; k++){
         const student = student_list[k].firstElementChild.firstElementChild.nextSibling.nextSibling///this targets the h3 element
-//console.log("student: " +student.innerHTML);
           if(student.innerHTML.includes(inputVal.toLowerCase())){//if any part of student contains the input value
             filteredList[cnt] = student_list[k];
             cnt += 1;
-//console.log("filteredList[cnt].innerHTML:  " +filteredList[cnt].innerHTML)
             student_list[k].style.display = ('block');//show student;
           }else{
             student_list[k].style.display = ("none");//else hide student;
           }
         }
-console.log(cnt)
-      // if(cnt < 1){
-      //   noResults.style.display = ('block');
-      // }else if(cnt > 0 && cnt < 10){
-      //   reset();
-      // }
-      // else{
-        showPage(filteredList, 1);
-      //}
+        if(cnt<1){
+          noResults.style.display = ('block');
+        }
+        if(cnt>0 && cnt<10){
+          reset();
+        }
+      showPage(filteredList, 1);
     }
 
 form.addEventListener('submit', (e) => {
