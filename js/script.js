@@ -7,38 +7,35 @@ FSJS project 2 - List Filter and Pagination
 //document.addEventListener('DOMContentLoaded', () => {//
 ////REMB every list is a subset of this master list.
   const student_list = document.getElementsByClassName("student-item cf");
-  const filteredList = document.getElementsByClassName("student-item cf");//move to the top with description
+  const filteredList = student_list[0];//document.getElementsByClassName("student-item cf");//move to the top with description
 
   const number_of_items = 10;
   const divPagination = document.createElement('div')
     divPagination.className = "pagination"
   let target = "";
-  const showPage = (list, page) => {//start of showPage function
-  let startIndex = (page * number_of_items) - number_of_items;
-  let endIndex = page * number_of_items;
-
-    if(list >= 1){//number 1 is a filter for the list. if it doesn't exist or is the normal student_list then this number is 1.
-      for(var i=0; i<student_list.length; i++){
+  let cnt = 0;//length of filtered list;
+  let startIndex = 0;
+  let endIndex = 0;
+//list is one of two things; student_list or filteredList.
+//page comes from the pagination links or is set to -2 if its a search.
+  const showPage = (listIn, page) => {//start of showPage function
+    const list = listIn;
+console.log("list:  "+list);
+   let startIndex = (page * number_of_items) - number_of_items;
+   let endIndex = page * number_of_items;
+   startIndex = (page * number_of_items) - number_of_items;
+   endIndex = page * number_of_items;
+    for(var i=0; i<list.length; i++){
         if(i >= startIndex && i < endIndex){
-          student_list[i].style.display = ('');//if student is on this list then show them
+          list[i].style.display = ('block');//if student is on this list then show them
         }else{
-          student_list[i].style.display = ("none")//else hide
+          list[i].style.display = ("none")//else hide
         }
       }
-      appendPageLinks(student_list);
-    }
-    if(page == -2){//the page number here (-2) is coming from the searchForStudent function.
-      for(var i=0; i<filteredList.length; i++){
-        if(i >= startIndex && i < endIndex){
-          filteredList[i].style.display = ('');//if student is on this list then show them
-        }else{
-          filteredList[i].style.display = ("none")//else hide
-        }
-      }
-      appendPageLinks(filteredList);
+      //reset();
+      appendPageLinks(list);
     }
 
-  }
 
 
 
@@ -51,7 +48,7 @@ FSJS project 2 - List Filter and Pagination
 //This function is called from showPage function only.
   function appendPageLinks(list){////This should be a list not a page number
 //let list = list;
-console.log('appendPageLinks List.length: '+list.length);
+//console.log('appendPageLinks List.length: '+list.length);
 //divParent isn't the same as student_list it's an HTML Collection
 //it is used to place the paginatioin links at the bottom.
       const divParent = document.querySelector('.page')
@@ -118,29 +115,31 @@ console.log('appendPageLinks List.length: '+list.length);
     function searchForStudent(text){
 //below borrowed from brunomarchir/list-pagination-and-filtering// thanks brunomarchir.  This has undergone change from brunomarchir original
       let inputVal = text;
-      let cnt = 0; //count the number of matches;
+      cnt = 0; //count the number of matches; global var
       noResults.style.display = ('none');
       const searchString = text;//input from user
 
-      for(var k=0; k<filteredList.length; k++){
-        const student = filteredList[k].firstElementChild.firstElementChild.nextSibling.nextSibling///this targets the h3 element
-
+      for(var k=0; k<student_list.length; k++){
+        const student = student_list[k].firstElementChild.firstElementChild.nextSibling.nextSibling///this targets the h3 element
+//console.log("student: " +student.innerHTML);
           if(student.innerHTML.includes(inputVal.toLowerCase())){//if any part of student contains the input value
-            //filteredList[k] =
-            filteredList[k].style.display = ('block');//show student;
+            filteredList[cnt] = student_list[k];
+//console.log("filteredList[cnt].innerHTML:  " +filteredList[cnt].innerHTML)
+            student_list[k].style.display = ('block');//show student;
             cnt+=1;
-
           }else{
-            filteredList[k].style.display = ("none");//else hide student;
+            student_list[k].style.display = ("none");//else hide student;
           }
         }
       if(cnt < 1){
-        noResults.style.display = ('');
+        noResults.style.display = ('block');
       }else if(cnt > 0 && cnt < 10){
-        reset();//remove the pagination
+        reset();
       }
       else{
-        showPage(filteredList, -2);//filter this list to only show needed ones
+console.log(cnt);
+        reset();
+        showPage(filteredList, cnt);
       }
     }
 
@@ -152,4 +151,4 @@ form.addEventListener('submit', (e) => {
   searchForStudent(text);
 });
 
-showPage(1, 1);///never send a 0;
+showPage(student_list, 1);///never send a 0;
