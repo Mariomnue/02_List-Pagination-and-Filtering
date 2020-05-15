@@ -1,7 +1,14 @@
-document.addEventListener('DOMContentLoaded', () => {//
+/******************************************
+Treehouse Techdegree:
+FSJS project 2 - List Filter and Pagination
+******************************************/
+// Study guide for this project - https://drive.google.com/file/d/1OD1diUsTMdpfMDv677TfL1xO2CEkykSz/view?usp=sharing
+
+//document.addEventListener('DOMContentLoaded', () => {//
 ////REMB every list is a subset of this master list.
   const student_list = document.getElementsByClassName("student-item cf");
   let filteredList = student_list[0];//document.getElementsByClassName("student-item cf");
+
   const number_of_items = 10;
   const divPagination = document.createElement('div')
     divPagination.className = "pagination"
@@ -15,9 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {//
     const page = pageIn
     let startIndex = (page * number_of_items) - number_of_items;
     let endIndex = page * number_of_items;
-    if(cnt > 10){//cnt is the number of filteredList items from the search.
+    if(cnt > 10){
       reset();
-      list.length = cnt;
+      list.length = cnt;//cnt is the number of filteredList items from the search.
     }
     for(var i=0; i<list.length; i++){
         if(i >= startIndex && i < endIndex){
@@ -26,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {//
           list[i].style.display = ("none")//else hide
         }
     }
+    //reset();
     appendPageLinks(list);
   }
 
@@ -77,15 +85,14 @@ document.addEventListener('DOMContentLoaded', () => {//
 //append everything together.
     const form = document.createElement('form');
     const input = document.createElement('input');
-    form.appendChild(input);
-      input.placeholder = "Search for students...";
+    input.placeholder = "Search for students...";
     const searchButton = document.createElement('button');
-    searchButton.textContent = "Search";
+    form.appendChild(input);
     form.appendChild(searchButton);
-    searchButton.className = "student-search";
-
+    searchButton.textContent = "Search";
     const parentDiv = document.querySelector('.page-header');
     const searchDiv = document.createElement('div')
+    searchButton.className = "student-search";
     searchDiv.className = "student-search";
     parentDiv.appendChild(searchDiv);
     searchDiv.appendChild(form);
@@ -98,6 +105,14 @@ document.addEventListener('DOMContentLoaded', () => {//
     searchDiv.appendChild(noResults);
     noResults.style.display = ('none');
 //end borrowed from brunomarchir/list-pagination-and-filtering// thanks brunomarchir.
+
+function clearSearch(){
+  for(i=0; i<cnt; i++){
+    filteredList = [];
+  }
+    cnt = 0;
+    reset();
+}
 
 let cnt = 0;//cnt is used to build the filtered list.
     function searchForStudent(text){
@@ -123,13 +138,6 @@ let cnt = 0;//cnt is used to build the filtered list.
           reset();
         }
       showPage(filteredList, 1);
-      function clearSearch(){//moved this into the searchForStudent does not need global access.
-        for(i=0; i<cnt; i++){
-          filteredList = [];
-        }
-          cnt = 0;
-          reset();
-      }
     }
 
 form.addEventListener('submit', (e) => {
@@ -146,4 +154,4 @@ form.addEventListener('keyup', (e) =>{
 });
 
 showPage(student_list, 1);///never send a 0;
-});
+//}
