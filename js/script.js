@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {//
+//document.addEventListener('DOMContentLoaded', () => {//
 ////REMB every list is a subset of this master list.
   const student_list = document.getElementsByClassName("student-item cf");
   let filteredList = student_list[0];//document.getElementsByClassName("student-item cf");
@@ -104,7 +104,7 @@ let cnt = 0;//cnt is used to build the filtered list.
       clearSearch();
       let inputVal = text;
       noResults.style.display = ('none');
-      const searchString = text;//input from user
+      //const searchString = text;//input from user
 
       for(var k=0; k<student_list.length; k++){
         const student = student_list[k].firstElementChild.firstElementChild.nextSibling.nextSibling///this targets the h3 element
@@ -116,10 +116,10 @@ let cnt = 0;//cnt is used to build the filtered list.
             student_list[k].style.display = ("none");//else hide student;
           }
         }
+
         if(cnt<1){
           noResults.style.display = ('block');
-        }
-        if(cnt>0 && cnt<10){
+        }else if(cnt>0 && cnt<10){
           reset();
         }
       showPage(filteredList, 1);
@@ -146,4 +146,4 @@ form.addEventListener('keyup', (e) =>{
 });
 
 showPage(student_list, 1);///never send a 0;
-});
+//});
